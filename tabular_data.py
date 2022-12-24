@@ -42,7 +42,7 @@ def clean_tabular_data(df):
     return raw_data_default_features
 
 def load_airbnb(df,label): 
-    column_features = df[label][df[label] != label]
+    features = df[label][df[label] != label]
     return (features,label)
 
 if __name__ == '__main__':
