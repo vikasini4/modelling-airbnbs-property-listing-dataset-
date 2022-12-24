@@ -41,18 +41,13 @@ def clean_tabular_data(df):
     raw_data_default_features = set_default_feature_values(raw_data_with_description)
     return raw_data_default_features
 
-def load_airbnb(df, label):
-    df_numerical = df.select_dtypes(include = ["int64", "float64"])
-    print(df_numerical.info())
-    print(df_numerical.loc[:, "bathrooms"].head(5))
-    label_series = df_numerical[label]
-    features = df_numerical.drop(label, axis=1)
-    full_data = (features, label_series)
-    return full_data
+def load_airbnb(df,label): 
+    column_features = df[label][df[label] != label]
+    return (features,label)
 
 if __name__ == '__main__':
     raw_data = pd.read_csv("/Users/vikasiniperemakumar/Desktop/AiCore/airbnb-property-listings/tabular_data/listing.csv", index_col=0)
     clean_data = clean_tabular_data(raw_data)
     os.chdir("/Users/vikasiniperemakumar/Desktop/AiCore/airbnb-property-listings/tabular_data")
     clean_data.to_csv("clean_tabular_data.csv")
-    full_data = load_airbnb(clean_data, "bathrooms")
+   
