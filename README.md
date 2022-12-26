@@ -18,3 +18,34 @@ Do the following within an if __name__ == "__main__" block:
 .Call clean_tabular_data on it
 
 .Save the processed data as clean_tabular_data.csv in the same folder as you found the raw tabular data.
+
+# Milestone 4:
+
+Creation of few ML models to predict the price of the listing per night and evaluate them.
+Use sklearn to compute the key measures of performance for your regression model. That should include the RMSE, and R^2 for both the training and test sets.
+
+Create a function called custom_tune_regression_model_hyperparameters which performs a grid search over a reasonable range of hyperparameter values.
+SKLearn has methods like GridSearchCV to do this, BUT instead of using them out the box, use this task to implement a similar thing from scratch to ensure that you have a solid understanding of what's going on under the hood.
+The function should take in as arguments:
+The model class
+The training, validation, and test sets
+A dictionary of hyperparameter names mapping to a list of values to be tried
+It should return the best model, a dictionary of its best hyperparameter values, and a dictionary of its performance metrics.
+The dictionary of performance metrics should include a key called "validation_RMSE", for the RMSE on the validation set, which is what you should use to select the best model.
+
+Create a function called tune_regression_model_hyperparameters which uses SKLearn's GridSearchCV to perform a grid search over a reasonable range of hyperparameter values.
+
+Create a folder called models.
+Within your models folder, create a folder called regression to save your regression models and their metrics in.
+Define a function called save_model which saves the model in a file called model.joblib, its hyperparameters in a file called hyperparameters.json, and its performance metrics in a file called metrics.json once it's trained and tuned.
+The function should take in the name of a folder where these files should be saved as a keyword argument "folder". In this case, set that argument equal to models/regression/linear_regression.
+
+We have to improve the performance of the model by using different models provided by sklearn.
+Use decision trees, random forests, and gradient boosting. Make sure you use the regression versions of each of these models, as many have classification counterparts with similar names.
+It's extremely important to apply your tune_regression_model_hyperparameters function to each of these to tune their hyperparameters before evaluating them. Because the sklearn API is the same for every model, this should be as easy as passing your model class into your function.
+Save the model, hyperparameters, and metrics in a folder named after the model class. For example, save your best decision tree in a folder called models/regression/decision_tree.
+Define all of the code to do this in a function called evaluate_all_models
+Call this function inside your if __name__ == "__main__" block.
+
+Define a function called find_best_model which evaluates which model is best, then returns you the loaded model, a dictionary of its hyperparameters, and a dictionary of its performance metrics.
+Call this function inside your if __name__ == "__main__" block, just after your call to evaluate_all_models.
