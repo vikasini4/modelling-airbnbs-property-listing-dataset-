@@ -50,7 +50,7 @@ Call this function inside your if __name__ == "__main__" block.
 Define a function called find_best_model which evaluates which model is best, then returns you the loaded model, a dictionary of its hyperparameters, and a dictionary of its performance metrics.
 Call this function inside your if __name__ == "__main__" block, just after your call to evaluate_all_models.
 
-#Milestone 5
+# Milestone 5
 
 Start by importing your load_airbnb function defined earlier and using it to load in a dataset with the "Category" as the label.
 Use sklearn to train a logistic regression model to predict the category from the tabular data.
