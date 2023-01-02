@@ -18,18 +18,16 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.tree import DecisionTreeClassifier
 
-# Product features and labels directly from the csv
 clean_data = pd.read_csv("clean_tabular_data.csv")
 features = clean_data.select_dtypes(include = ["int64", "float64"])
 label_series = clean_data["Category"]
 
 np.random.seed(2)
 
-# Encode labels
 
 label_categories = label_series.unique()
-le = LabelEncoder()
-label_encoded = le.fit_transform(label_series)
+LE = LabelEncoder()
+label_encoded = LE.fit_transform(label_series)
 
 X, y = (features, label_encoded)
 
@@ -57,11 +55,11 @@ def print_performance(y_hat_train, y_hat_validation):
     test_report = classification_report(y_validation, y_hat_validation)
     print("Train precision", train_precision)
     print("Train recall", train_recall)
-    print("Train f1", train_f1)
+    print("Train F1", train_f1)
     print("Train report", train_report)
     print("Validation precision", test_precision)
     print("Validation recall", test_recall)
-    print("Validation f1", test_f1)
+    print("Validation F1", test_f1)
     print("Validation report", test_report)
 
 def tune_classification_model_hyperparameters(model_class, 
@@ -74,24 +72,23 @@ def tune_classification_model_hyperparameters(model_class,
                     "GradientBoostingClassifier" : GradientBoostingClassifier
                     }
     model = models_list[model_class]()
-    GS = GridSearchCV(estimator = model, 
+    GSCV = GridSearchCV(estimator = model, 
                       param_grid = search_space, 
                       scoring = "accuracy",
                       )
-    GS.fit(X_train, y_train)
-    best_model = models_list[model_class](**GS.best_params_)
+    GSCV.fit(X_train, y_train)
+    best_model = models_list[model_class](**GSCV.best_params_)
     best_model.fit(X_train, y_train)
     y_hat_validation = best_model.predict(X_validation)
     validation_accuracy = accuracy_score(y_validation, y_hat_validation)
     validation_f1 = f1_score(y_validation, y_hat_validation, average="macro")
     performance_metrics_dict = {"validation_accuracy": validation_accuracy, "validation_f1": validation_f1}
-    best_model_list = [best_model.fit(X_train, y_train), GS.best_params_, performance_metrics_dict]
+    best_model_list = [best_model.fit(X_train, y_train), GSCV.best_params_, performance_metrics_dict]
     print(best_model_list)
     return best_model_list
 
 def save_model(model_list, folder="models/classification"):
     os.chdir('/Users/vikasiniperemakumar/Desktop/AiCore/airbnb-property-listings/')
-    #if not os.path.exists(folder):
     try:
         os.makedirs(folder)
     except:
@@ -172,7 +169,6 @@ def find_best_model(model_details_list):
 
 if  __name__ == '__main__':
     y_hat = create_first_model()
-    # print_performance(y_hat[0], y_hat[1])
     model_details_list = evaluate_all_models()
     best_model_details = find_best_model(model_details_list)
     print(f"The best model: {best_model_details}")
