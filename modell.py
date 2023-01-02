@@ -18,7 +18,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
 
-np.random.seed(4)
+np.random.seed(2)
 
 clean_data = pd.read_csv("clean_tabular_data.csv")
 X, y = tabular_data.load_airbnb(clean_data, "Price_Night")
@@ -101,19 +101,29 @@ def tune_regression_model_hyperparameters(model_class,
     return best_model_list
 
 def save_model(model_list, folder="models/regression/linear_regression"):
+    os.chdir('/Users/vikasiniperemakumar/Desktop/AiCore/airbnb-property-listings/')
+    #if not os.path.exists(folder):
+    try:
+        os.makedirs(folder)
+    except:
+        pass
     model = model_list[0]
     hyper_params = model_list[1]
     performance_metrics = model_list[2]
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-    joblib.dump(model, f"{folder}/model.joblib")
-    with open(f"{folder}/hyperparameters.json", 'w') as fp:
-        json.dump(hyper_params, fp)
-    with open(f"{folder}/metrics.json", 'w') as fp:
-        json.dump(performance_metrics, fp)
+
+    os.chdir('/Users/vikasiniperemakumar/Desktop/AiCore/airbnb-property-listings/'+folder)
+    joblib.dump(model,"model")
+    json_string = json.dumps(hyper_params)
+    parameter_file = open("hyperparameters.json","w")
+    parameter_file.write(json_string)
+    
+    json_string = json.dumps(performance_metrics)
+    metric_file = open("metrics.json","w")
+    metric_file.write(json_string)
+    return
 
 def evaluate_all_models(task_folder="models/regression"):
-    np.random.seed(4)
+    np.random.seed(2)
     decision_tree_model = tune_regression_model_hyperparameters("DecisionTreeRegressor", 
     X_train, y_train, X_validation, y_validation, search_space = 
     {
@@ -158,7 +168,7 @@ def find_best_model(model_details_list):
     return best_model_details
 
 if  __name__ == '__main__':
-    np.random.seed(4)
+    np.random.seed(2)
     model_details_list = evaluate_all_models()
     best_model_details = find_best_model(model_details_list)
     print(f"The best model: {best_model_details}")
