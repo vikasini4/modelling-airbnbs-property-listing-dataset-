@@ -80,3 +80,41 @@ Adapt your find_best_model function defined earlier so that it takes in your tas
 Like earlier, it should still return you the loaded model, a dictionary of its hyperparameters, and a dictionary of its performance metrics.
 Call this function inside your if __name__ == "__main__" block just after your call to evaluate_all_models.
 
+#Milestone 6
+
+Created a PyTorch Dataset called AirbnbNightlyPriceImageDataset that returns a tuple of (features, label) when indexed. The features should be a tensor of the numerical tabular features of the house. The second element is a scalar of the price per night.
+
+Created a dataloader for the train set and test set that shuffles the data. Further, split the train set into train and validation.
+
+Defined a PyTorch model class containing the architecture for a fully connected neural network.
+To start with, it should only ingest the numerical tabular data. We will process the text and image features later.
+Don't train it yet. Instead, just ensure that it can perform a forward pass on a batch of data and produce an output of the correct shape.
+To to this, defined the start of a function called train which takes in the model, the data loader, and the number of epochs. For now, we have to get the first batch of data from the dataloader and pass it through the model, then break out of the training loop.
+
+Completed the training loop so that it iterates through every batch in the dataset for the specified number of epochs, and optimises the model parameters.
+
+Used tensorboard to visualize the training curves of the model and the accuracy both on the training and validation set.
+
+Created a YAML file called nn_config.yaml, next to your modelling.py file, that defines the architecture of the neural network.
+Specified:
+The name of the optimiser used under a key called optimiser
+The learning rate
+The width of each hidden layer under a key called hidden_layer_width (For simplicity, make all of the hidden layers the same width)
+The depth of the model
+Then, defined a function called get_nn_config which reads in this file and returns it as a dictionary.
+Passed the config into your train function as the hyperparameter dictionary which you define earlier.
+Specified a keyword argument called "config" which must be passed to your model class upon initialisation.
+The network should then use that config to set the corresponding hyperparameters.
+
+Created a new folder named neural_networks. Inside it, create a folder called regression.
+Adapted the function called save_model so that it detects whether the model is a PyTorch module, and if so, saves the torch model in a file called model.pt, its hyperparameters in a file called hyperparameters.json, and its performance metrics in a file called metrics.json.
+Your metrics should include:
+The RMSE loss of your model under a key called RMSE_loss for training, validation, and test sets
+The R^2 score of your model under a key called R_squared for training, validation, and test sets
+The time taken to train the model under a key called training_duration
+The average time taken to make a prediction under a key called inference_latency
+
+Defined a function generate_nn_configs which creates many config dictionaries for your network.
+Defined a function called find_best_nn which calls this function and then sequentially trains models with each config. It should save the config used in the hyperparameters.json file for each model trained. Return the model, metrics, and hyperparameters. Saved the best model in a folder.
+
+
