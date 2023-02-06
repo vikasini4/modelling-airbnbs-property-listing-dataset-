@@ -28,6 +28,10 @@ class AirbnbNightlyPriceImageDataset(Dataset):
         features = torch.tensor(features)
         label = self.label.iloc[index]
         return (features, label)
+        #row = self.data.iloc[index]
+        #features = torch.tensor(row[['guests','beds','bathrooms','Cleanliness_rating','Accuracy_rating','Communication_rating','Check-in_rating','Value_rating','amenities_count','bedrooms']])
+        #label = torch.tensor(row['Price_Night'])
+        #return (features,label)
 
     def __len__(self):
         return len(self.features)
@@ -83,7 +87,7 @@ def train(model, data_loader, hyper_dict, epochs):
     optimizer_instance = getattr(torch.optim, optimizer_class)
     optimizer = optimizer_instance(model.parameters(), lr=hyper_dict["learning_rate"])
 
-    writer = SummaryWriter()
+    writer = SummaryWriter('/Users/vikasiniperemakumar/Desktop/AiCore/airbnb-property-listings/models/runs')
 
     batch_idx = 0
 
@@ -170,7 +174,7 @@ def save_model(model, hyper_dict, performance_metrics, nn_folder="/Users/vikasin
         with open(f"{model_folder}/metrics.json", 'w') as fp:
             json.dump(performance_metrics, fp)
 
-def do_full_model_train(hyper_dict, epochs=2):
+def do_full_model_train(hyper_dict, epochs=5):
     model = NN(hyper_dict)
     start_time = time.time()
     train(model, train_loader, hyper_dict, epochs)
